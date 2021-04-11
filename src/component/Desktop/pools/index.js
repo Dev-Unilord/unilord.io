@@ -191,8 +191,8 @@ function Pools({ web3, account, connectWallet, pool }) {
               <span>100%</span>
             </div>
           </PercentBtns>
-          <TwoBtns onClick={Approve}>
-            <div>
+          <TwoBtns >
+            <div onClick={()=>{if(!plIsApproved) Approve();}}>
               <span className={plIsApproved ? "disable" : ""}>
                 {plIsApproved ? "Approved" : "Approve"}
               </span>
