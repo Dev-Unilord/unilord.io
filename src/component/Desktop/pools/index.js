@@ -42,7 +42,7 @@ function Pools({ web3, account, connectWallet, pool }) {
   const [RewardTokenInstance, setRewardTokenInstance] = useState(undefined);
 
   const Approve = () => {
-    if (!StakeTokenInstance) return;
+    if (!StakeTokenInstance||plIsApproved) return;
     StakeTokenInstance.methods
       .approve(pool, toWei("9999999999999999999", "ether"))
       .send({ from: account });
@@ -55,7 +55,7 @@ function Pools({ web3, account, connectWallet, pool }) {
     setPlAmount(0);
   };
   const SetPercent = x => {
-    setPlAmount((n(plBalance).replaceAll(",", "") / 100) * x);
+    setPlAmount(((n(plBalance).replaceAll(",", "") / 100) * x).toString());
   };
   const createInstance = () => {
     setPoolInstance(new web3.eth.Contract(POOL_ABI, pool));
@@ -191,8 +191,8 @@ function Pools({ web3, account, connectWallet, pool }) {
               <span>100%</span>
             </div>
           </PercentBtns>
-          <TwoBtns onClick={Approve}>
-            <div>
+          <TwoBtns >
+            <div onClick={Approve}>
               <span className={plIsApproved ? "disable" : ""}>
                 {plIsApproved ? "Approved" : "Approve"}
               </span>
