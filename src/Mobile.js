@@ -1,16 +1,38 @@
 import Gnb from "./component/Mobile/gnb";
 import Modal from "./component/Mobile/modal";
 import Pools from "./component/Mobile/pools";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Web3 from "web3";
+import contracts from "./lib/contracts";
 
-function Mobile() {
+function Mobile({ web3Modal }) {
   const [display, setDisplay] = useState(false);
   const [displayS, setDisplayS] = useState(false);
   const [type, setType] = useState("pool");
+  const [web3, setWeb3] = useState(undefined);
+  const [account, setAccount] = useState(undefined);
+  const [chainId, setChainId] = useState(-1);
+
+  const ConnectWallet = async () => {
+    const provider = await web3Modal.connect();
+    await setWeb3(new Web3(provider));
+  };
+
+  useEffect(async () => {
+    if (!web3) return;
+    setAccount((await web3.eth.getAccounts())[0]);
+    setChainId(await web3.eth.getChainId());
+  }, [web3]);
+
   return (
     <div className="Mobile">
       <Gnb display={display} setDisplay={setDisplay} />
-      <Pools />
+      <Pools
+        web3={web3}
+        account={account}
+        connectWallet={ConnectWallet}
+        pool={contracts[chainId] ? contracts[chainId].POOL.PEER : undefined}
+      />
       <Modal type={type} display={displayS} setDisplay={setDisplayS} />
       <img
         src="./images/btn-hbg.svg"

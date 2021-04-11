@@ -23,7 +23,7 @@ function Pools({ web3, account, connectWallet, pool }) {
   //     clearInterval(timerInstance);
   //   };
   // }, [time]);
-  const [isOpen1, setIsOpen1] = useState(true);
+  const [isOpen1, setIsOpen1] = useState(false);
   const [plName, setPlName] = useState("PEER");
   const [plAPY, setPlAPY] = useState(30);
   const [plCount, setPlCount] = useState("00.00.00.00");
@@ -32,7 +32,7 @@ function Pools({ web3, account, connectWallet, pool }) {
   const [plLocked, setPlLocked] = useState(0);
   const [plMined, setPlMined] = useState(0);
   const [plBalance, setPlBalance] = useState(0);
-  const [plAmount, setPlAmount] = useState(0);
+  const [plAmount, setPlAmount] = useState("0");
   const [plIsApproved, setPlIsApproved] = useState(false);
   const [plDate, setPlDate] = useState({ from: 0, to: 0 });
   const [stakeToken, setStakeToken] = useState(undefined);
@@ -42,10 +42,14 @@ function Pools({ web3, account, connectWallet, pool }) {
   const [RewardTokenInstance, setRewardTokenInstance] = useState(undefined);
 
   const Approve = () => {
-    if (!StakeTokenInstance) return;
+    if (!StakeTokenInstance || plIsApproved) return;
     StakeTokenInstance.methods
       .approve(pool, toWei("9999999999999999999", "ether"))
       .send({ from: account });
+  };
+  const GetReward = () => {
+    if (!PoolInstance) return;
+    PoolInstance.methods.getReward().send({ from: account });
   };
   const Stake = () => {
     if (!PoolInstance) return;
@@ -55,7 +59,7 @@ function Pools({ web3, account, connectWallet, pool }) {
     setPlAmount(0);
   };
   const SetPercent = x => {
-    setPlAmount((n(plBalance).replaceAll(",", "") / 100) * x);
+    setPlAmount(((n(plBalance).replaceAll(",", "") / 100) * x).toString());
   };
   const createInstance = () => {
     setPoolInstance(new web3.eth.Contract(POOL_ABI, pool));
@@ -132,7 +136,7 @@ function Pools({ web3, account, connectWallet, pool }) {
             }}
           >
             <span>Stake</span>
-            <img src={`./images/cross-${isOpen1 ? "bottom" : "top"}.svg`} />
+            <img src={`./images/cross-${isOpen1 ? "top" : "bottom"}.svg`} />
           </BtnStake>
         </Content>
         <LineV className={isOpen1 ? "" : "hide"} />
@@ -195,14 +199,18 @@ function Pools({ web3, account, connectWallet, pool }) {
               <span>100%</span>
             </div>
           </PercentBtns>
-          <TwoBtns onClick={Approve}>
-            <div>
-              <span className={plIsApproved ? "disable" : ""}>
-                {plIsApproved ? "Approved" : "Approve"}
+          <TwoBtns>
+            <div
+              onClick={() => {
+                plIsApproved ? GetReward() : Approve();
+              }}
+            >
+              <span className={account ? "" : "disable"}>
+                {plIsApproved ? "Mine" : "Approve"}
               </span>
             </div>
             <div>
-              <span className={plIsApproved ? "disable" : ""}>Unstake</span>
+              <span className={account ? "disable" : "disable"}>Unstake</span>
             </div>
           </TwoBtns>
           <StakeBtn
@@ -210,7 +218,7 @@ function Pools({ web3, account, connectWallet, pool }) {
               account ? Stake() : connectWallet();
             }}
           >
-            <span className={account && plIsApproved ? "" : "disable"}>
+            <span className={!account || plIsApproved ? "" : "disable"}>
               {account ? "Stake" : "Connect Wallet"}
             </span>
           </StakeBtn>

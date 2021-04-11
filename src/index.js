@@ -53,7 +53,7 @@ ReactDOM.render(
         <Desktop web3Modal={web3Modal} />
       </BrowserView>
       <MobileView>
-        <Mobile />
+        <Mobile web3Modal={web3Modal} />
       </MobileView>
     </RecoilRoot>
   </React.StrictMode>,
