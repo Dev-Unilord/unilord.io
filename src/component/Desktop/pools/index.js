@@ -55,7 +55,7 @@ function Pools({ web3, account, connectWallet, pool }) {
     setPlAmount(0);
   };
   const SetPercent = x => {
-    setPlAmount((n(plBalance).replaceAll(",", "") / 100) * x);
+    setPlAmount(((n(plBalance).replaceAll(",", "") / 100) * x).toString());
   };
   const createInstance = () => {
     setPoolInstance(new web3.eth.Contract(POOL_ABI, pool));
