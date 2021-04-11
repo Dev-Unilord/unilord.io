@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { atom, useRecoilState } from "recoil";
 import { fromWei, toWei, toBN } from "web3-utils";
 import { resultingClientExists } from "workbox-core/_private";
+import CountUp from "react-countup";
 
 export const ERC20_ABI = require("./../../../lib/abis/ERC20ABI.json");
 export const POOL_ABI = require("./../../../lib/abis/poolABI.json");
@@ -148,7 +149,14 @@ function Pools({ web3, account, connectWallet, pool }) {
           </div>
           <div className="amount" style={{ marginTop: "10px" }}>
             <span className="text">USDT Mined:</span>
-            <span className="value">{n(plMined)}</span>
+            <span className="value">
+              <CountUp
+                preserveValue={true}
+                end={n(plMined)}
+                decimals={2}
+                duration={1}
+              ></CountUp>
+            </span>
             <span className="symbol">USDT</span>
           </div>
           <div className="amount" style={{ marginTop: "25px" }}>
