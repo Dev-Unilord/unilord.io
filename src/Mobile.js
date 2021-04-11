@@ -1,5 +1,6 @@
 import Gnb from "./component/Mobile/gnb";
 import Modal from "./component/Mobile/modal";
+import Pools from "./component/Mobile/pools";
 import React, { useState } from "react";
 
 function Mobile() {
@@ -9,6 +10,7 @@ function Mobile() {
   return (
     <div className="Mobile">
       <Gnb display={display} setDisplay={setDisplay} />
+      <Pools />
       <Modal type={type} display={displayS} setDisplay={setDisplayS} />
       <img
         src="./images/btn-hbg.svg"
