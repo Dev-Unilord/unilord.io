@@ -93,6 +93,7 @@ function Pools({ name, web3, account, connectWallet, pool }) {
 
   const Approve = () => {
     if (!StakeTokenInstance || plIsApproved) return;
+    console.log(StakeTokenInstance);
     StakeTokenInstance.methods
       .approve(pool, toWei("9999999999999999999", "ether"))
       .send({ from: account });
