@@ -10,6 +10,9 @@ function Home() {
           A decentalized, reliable and sustainable De-Fi <br />
           made for a digital economy.
         </span>
+        <Btn onClick={() => (window.location = "https://finance.unilord.io")}>
+          <span>LORD FINANCE</span>
+        </Btn>
       </Content>
     </Container>
   );
@@ -52,4 +55,28 @@ const Content = styled.div`
   }
 `;
 
+const Btn = styled.div`
+  display: flex;
+  margin: auto auto;
+  margin-top: 50px;
+  width: 274px;
+  height: 42px;
+  object-fit: contain;
+  box-shadow: 0 0 10px 0 #ffffff;
+  border: solid 2px #ffffff;
+  span {
+    margin: auto auto;
+    font-family: Times New Roman;
+    width: 156px;
+    height: 27px;
+    font-size: 20px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.35;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+  }
+`;
 export default Home;
