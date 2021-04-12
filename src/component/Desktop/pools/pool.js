@@ -200,7 +200,7 @@ function Pool({ name, web3, account, connectWallet, pool }) {
               duration={1}
             ></CountUp>
           </span>
-          <span className="symbol">USDT</span>
+          <span className="symbol">WETH</span>
         </div>
         <div className="amount" style={{ marginTop: "25px" }}>
           <span className="text">Balance:</span>
