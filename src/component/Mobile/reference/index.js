@@ -20,7 +20,13 @@ function Reference() {
           <Logo onClick={() => window.open("https://github.com/Dev-Unilord")}>
             <img src="./images/ic-github.svg" className="github" />
           </Logo>
-          <Logo onClick={() => window.open("./assets/UNILORD_Whitepaper.pdf")}>
+          <Logo
+            onClick={() =>
+              window.open(
+                "https://s3.ap-northeast-2.amazonaws.com/unilord.io/Whitepaper/UNILORD_Whitepaper.pdf"
+              )
+            }
+          >
             <img src="./images/ic-whitepaper.svg" className="whitepaper" />
           </Logo>
         </Logos>
