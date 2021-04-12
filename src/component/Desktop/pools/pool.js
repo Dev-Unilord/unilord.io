@@ -7,6 +7,19 @@ import CountUp from "react-countup";
 
 export const ERC20_ABI = require("./../../../lib/abis/ERC20ABI.json");
 export const POOL_ABI = require("./../../../lib/abis/poolABI.json");
+
+const timeState = atom({
+  key: "timeState",
+  default: {
+    d: 0,
+    h: 0,
+    m: 0,
+    s: 0
+  }
+});
+const P = number => {
+  return number.toString().padStart(2, "0");
+};
 function n(x) {
   x = fromWei(String(x), "ether");
   let n = x.split(".");
@@ -18,6 +31,43 @@ function StartInterval(callback, t) {
   return setInterval(callback, t);
 }
 function Pool({ name, web3, account, connectWallet, pool }) {
+  const [time, setTime] = useRecoilState(timeState);
+
+  const DdayTimer = () => {
+    var dday = new Date("April 14, 2021 23:00:00").getTime();
+    var nowday = new Date();
+    nowday = nowday.getTime();
+    var distance = dday - nowday;
+
+    var d = Math.floor(distance / (1000 * 60 * 60 * 24));
+
+    var h = Math.floor((distance / (1000 * 60 * 60)) % 24);
+    var m = Math.floor((distance / (1000 * 60)) % 60);
+    var s = Math.floor((distance / 1000) % 60);
+    if (distance <= 0) {
+      setTime({
+        d: 0,
+        h: 0,
+        m: 0,
+        s: 0
+      });
+    } else {
+      setTime({
+        d,
+        h,
+        m,
+        s
+      });
+    }
+  };
+
+  useEffect(() => {
+    const timerInstance = setInterval(DdayTimer, 1000);
+    return () => {
+      clearInterval(timerInstance);
+    };
+  }, [time]);
+
   // useEffect(() => {
   //   const timerInstance = setInterval(DdayTimer, 1000);
   //   return () => {
@@ -119,7 +169,9 @@ function Pool({ name, web3, account, connectWallet, pool }) {
         <span className="name">{name}</span>
         <span className="APY">APY: {plAPY}%</span>
         <Line />
-        <span className="countdown">00.00.00:00</span>
+        <span className="countdown">{`${P(time.d)}.${P(time.h)}.${P(
+          time.m
+        )}:${P(time.s)}`}</span>
         <span className="locked">PEER {n(plTL)} PEER</span>
         <span className="lockedValue">TVL ${n(plTVL)} PEER Locked</span>
         <BtnStake

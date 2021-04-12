@@ -17,6 +17,9 @@ const timeState = atom({
     s: 0
   }
 });
+const P = number => {
+  return number.toString().padStart(2, "0");
+};
 function n(x) {
   x = fromWei(String(x), "ether");
   let n = x.split(".");
@@ -165,7 +168,9 @@ function Pools({ name, web3, account, connectWallet, pool }) {
           <span className="name">{name}</span>
           <span className="APY">APY: {plAPY}%</span>
           <Line />
-          <span className="countdown">{`${time.d}.${time.h}.${time.m}:${time.s}`}</span>
+          <span className="countdown">{`${P(time.d)}.${P(time.h)}.${P(
+            time.m
+          )}:${P(time.s)}`}</span>
           <span className="locked">PEER {n(plTL)} PEER</span>
           <span className="lockedValue">TVL ${n(plTVL)} PEER Locked</span>
           <BtnStake
