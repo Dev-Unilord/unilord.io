@@ -18,7 +18,7 @@ function Gnb({ display, setDisplay, account, connectWallet }) {
         <img src="./images/logo.svg" />
       </Left>
       <Content>
-        <Logo onClick={() => Scroll("Home")}>
+        <Logo onClick={() => (window.location = "https://unilord.io")}>
           <span>UNILORD</span>
         </Logo>
         <ConnectWallet onClick={() => connectWallet()}>
@@ -29,20 +29,20 @@ function Gnb({ display, setDisplay, account, connectWallet }) {
           </span>
         </ConnectWallet>
         <Nav>
-          <div onClick={() => Scroll("Home")}>
+          <div onClick={() => (window.location = "https://unilord.io")}>
+            <span>Home</span>
+          </div>
+          <div>
             <span>Lord Pools</span>
           </div>
-          <div onClick={() => Scroll("About")}>
-            <span>ABOUT</span>
+          <div>
+            <span>Lord Swap</span>
           </div>
           <div>
-            <span>SERVICES</span>
+            <span>Lord Finance</span>
           </div>
           <div>
-            <span>REFERENCE</span>
-          </div>
-          <div>
-            <span>DISCLAIMER</span>
+            <span>About Lord</span>
           </div>
         </Nav>
       </Content>
