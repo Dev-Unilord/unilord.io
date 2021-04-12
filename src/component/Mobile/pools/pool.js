@@ -171,8 +171,10 @@ function Pools({ name, web3, account, connectWallet, pool }) {
           <span className="countdown">{`${P(time.d)}.${P(time.h)}.${P(
             time.m
           )}:${P(time.s)}`}</span>
-          <span className="locked">PEER {n(plTL)} PEER</span>
-          <span className="lockedValue">TVL ${n(plTVL)} PEER Locked</span>
+          <span className="locked">
+            Total {n(plTL)} {name}
+          </span>
+          <span className="lockedValue">TVL {n(plTVL)} USD Locked</span>
           <BtnStake
             onClick={() => {
               setIsOpen1(!isOpen1);
@@ -185,9 +187,9 @@ function Pools({ name, web3, account, connectWallet, pool }) {
         <LineV className={isOpen1 ? "" : "hide"} />
         <Content className={"sub " + (isOpen1 ? "" : "hide")}>
           <div className="amount">
-            <span className="text">PEER Locked:</span>
+            <span className="text">{name} Locked:</span>
             <span className="value">{n(plLocked)}</span>
-            <span className="symbol">PEER</span>
+            <span className="symbol">{name}</span>
           </div>
           <div className="amount" style={{ marginTop: "10px" }}>
             <span className="text">WETH Mined:</span>
@@ -204,7 +206,7 @@ function Pools({ name, web3, account, connectWallet, pool }) {
           <div className="amount" style={{ marginTop: "25px" }}>
             <span className="text">Balance:</span>
             <span className="value">{n(plBalance)}</span>
-            <span className="symbol">PEER</span>
+            <span className="symbol">{name}</span>
           </div>
           <input
             type="text"
