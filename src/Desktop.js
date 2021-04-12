@@ -50,7 +50,7 @@ function Desktop({ web3Modal }) {
         web3={web3}
         account={account}
         connectWallet={ConnectWallet}
-        pool={contracts[chainId] ? contracts[chainId].POOL.PEER : undefined}
+        pools={contracts[chainId] ? contracts[chainId].POOL : undefined}
       />
       <Modal type={type} modalOpen={display} setModalOpen={setDisplay} />
       <style jsx global>{`
