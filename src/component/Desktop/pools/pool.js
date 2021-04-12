@@ -191,7 +191,7 @@ function Pool({ name, web3, account, connectWallet, pool }) {
           <span className="symbol">PEER</span>
         </div>
         <div className="amount" style={{ marginTop: "10px" }}>
-          <span className="text">USDT Mined:</span>
+          <span className="text">WETH Mined:</span>
           <span className="value">
             <CountUp
               preserveValue={true}
