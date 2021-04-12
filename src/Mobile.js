@@ -26,7 +26,12 @@ function Mobile({ web3Modal }) {
 
   return (
     <div className="Mobile">
-      <Gnb display={display} setDisplay={setDisplay} />
+      <Gnb
+        display={display}
+        account={account}
+        setDisplay={setDisplay}
+        connectWallet={ConnectWallet}
+      />
       <Pools
         web3={web3}
         account={account}

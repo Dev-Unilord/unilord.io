@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-function Gnb({ display, setDisplay }) {
+function Gnb({ display, setDisplay, account, connectWallet }) {
   function Scroll(section) {
     window.location = "#" + section;
     setDisplay(!display);
@@ -21,6 +21,13 @@ function Gnb({ display, setDisplay }) {
         <Logo onClick={() => Scroll("Home")}>
           <span>UNILORD</span>
         </Logo>
+        <ConnectWallet onClick={() => connectWallet()}>
+          <span>
+            {account
+              ? account.substring(0, 8) + "..." + account.substring(36, 42)
+              : "Connect wallet"}
+          </span>
+        </ConnectWallet>
         <Nav>
           <div onClick={() => Scroll("Home")}>
             <span>Lord Pools</span>
@@ -42,6 +49,27 @@ function Gnb({ display, setDisplay }) {
     </Container>
   );
 }
+const ConnectWallet = styled.div`
+  display: flex;
+  margin-top: 60px;
+  margin-left: -5vw;
+  width: 45vw;
+  height: 30px;
+  object-fit: contain;
+  border-radius: 20px;
+  box-shadow: 0 0 6px 0 rgba(255, 255, 255, 0.6);
+  background-color: #000000;
+  span {
+    margin: auto auto;
+    font-family: Times New Roman;
+    font-size: 15px;
+    font-size: 15px;
+    font-style: italic;
+    line-height: 1.13;
+    text-align: center;
+    color: #29a7ff;
+  }
+`;
 
 const Container = styled.div`
   display: flex;
