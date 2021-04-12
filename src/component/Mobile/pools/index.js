@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Pool from "./pool";
 
-function Pools({ name, web3, account, connectWallet, pools }) {
+function Pools({ chainId, web3, account, connectWallet, pools }) {
   return (
     <Container className="Pools" id="Pools">
       <Title>
-        <span>LORD Pool</span>
+        <span>LORD Pool ${chainId}</span>
       </Title>
       <Pool
         name="PEER"
