@@ -10,7 +10,7 @@ function Modal({ type, display, setDisplay }) {
       break;
     case "swap":
       image = "./images/modal_swap.png";
-      text = "Gateway from Mon to Lord to leverage your interest";
+      text = "Gateway from Peer to Lord to leverage your interest";
       break;
     case "finance":
       image = "./images/modal_finance.png";
