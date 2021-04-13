@@ -1,8 +1,24 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Pool from "./pool";
+import axios from "axios";
 
+function StartInterval(callback, t) {
+  callback();
+  return setInterval(callback, t);
+}
 function Pools({ name, web3, account, connectWallet, pools }) {
+  const [prices, setPrices] = useState({});
+  useEffect(() => {
+    let Interval = StartInterval(async () => {
+      let res = await axios.get(
+        "https://api.coingecko.com/api/v3/simple/price?ids=unilord&vs_currencies=usd"
+      );
+      setPrices(res.data);
+      console.log(res.data);
+    }, 5000);
+    return clearInterval(Interval);
+  }, []);
   return (
     <Container className="Pools" id="Pools">
       <Title>
@@ -10,6 +26,7 @@ function Pools({ name, web3, account, connectWallet, pools }) {
       </Title>
       <Pool
         name="PEER"
+        price={prices.unilord ? prices.unilord.usd : 0}
         web3={web3}
         account={account}
         connectWallet={connectWallet}
@@ -17,6 +34,7 @@ function Pools({ name, web3, account, connectWallet, pools }) {
       />
       <Pool
         name="PEER-LP"
+        price={prices.unilord ? prices.unilord.usd : 0}
         web3={web3}
         account={account}
         connectWallet={connectWallet}

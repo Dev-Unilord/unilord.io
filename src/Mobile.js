@@ -36,7 +36,6 @@ function Mobile({ web3Modal }) {
         web3={web3}
         account={account}
         connectWallet={ConnectWallet}
-        chainId={chainId}
         pools={contracts[chainId] ? contracts[chainId].POOL : undefined}
       />
       <Modal type={type} display={displayS} setDisplay={setDisplayS} />
