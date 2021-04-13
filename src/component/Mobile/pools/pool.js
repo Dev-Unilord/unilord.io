@@ -20,15 +20,22 @@ const timeState = atom({
 const P = number => {
   return number.toString().padStart(2, "0");
 };
-function n(x) {
-  x = fromWei(String(x), "ether");
+function n(x, pad = 2) {
+  x = fromWei(String(x), "ether").toString();
   let n = x.split(".");
-  x = n[0] + (n.length == 2 ? "." + n[1].substr(0, 2) : ".00");
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  x =
+    n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+    (n.length == 2 ? "." + n[1].substr(0, pad) : ".00");
+  return x;
 }
 function StartInterval(callback, t) {
   callback();
   return setInterval(callback, t);
+}
+function isOver(periodFinish) {
+  let timestampSecond = Math.floor(+new Date() / 1000);
+  return timestampSecond > periodFinish;
 }
 function Pools({ name, web3, account, connectWallet, pool }) {
   const [time, setTime] = useRecoilState(timeState);
@@ -76,7 +83,6 @@ function Pools({ name, web3, account, connectWallet, pool }) {
   // }, [time]);
   const [isOpen1, setIsOpen1] = useState(false);
   const [plAPY, setPlAPY] = useState(30);
-  const [plCount, setPlCount] = useState("00.00.00.00");
   const [plTL, setPlTL] = useState(0);
   const [plTVL, setPlTVL] = useState(0);
   const [plLocked, setPlLocked] = useState(0);
@@ -84,12 +90,11 @@ function Pools({ name, web3, account, connectWallet, pool }) {
   const [plBalance, setPlBalance] = useState(0);
   const [plAmount, setPlAmount] = useState("0");
   const [plIsApproved, setPlIsApproved] = useState(false);
-  const [plDate, setPlDate] = useState({ from: 0, to: 0 });
   const [stakeToken, setStakeToken] = useState(undefined);
   const [rewardToken, setRewardToken] = useState(undefined);
   const [PoolInstance, setPoolInstance] = useState(undefined);
   const [StakeTokenInstance, setStakeTokenInstance] = useState(undefined);
-  const [RewardTokenInstance, setRewardTokenInstance] = useState(undefined);
+  const [periodFinish, setPeriodFinish] = useState(0);
 
   const Approve = () => {
     if (!StakeTokenInstance || plIsApproved) return;
@@ -109,6 +114,10 @@ function Pools({ name, web3, account, connectWallet, pool }) {
       .send({ from: account });
     setPlAmount(0);
   };
+  const UnStake = () => {
+    if (!PoolInstance) return;
+    PoolInstance.methods.exit().send({ from: account });
+  };
   const SetPercent = x => {
     setPlAmount(((n(plBalance).replaceAll(",", "") / 100) * x).toString());
   };
@@ -117,7 +126,6 @@ function Pools({ name, web3, account, connectWallet, pool }) {
   };
   const createTokenInstance = () => {
     setStakeTokenInstance(new web3.eth.Contract(ERC20_ABI, stakeToken));
-    setRewardTokenInstance(new web3.eth.Contract(ERC20_ABI, rewardToken));
   };
 
   useEffect(() => {
@@ -139,6 +147,7 @@ function Pools({ name, web3, account, connectWallet, pool }) {
       setPlMined(await PoolInstance.methods.earned(account).call());
       setPlTL(await PoolInstance.methods.totalSupply().call());
       setPlTVL(await PoolInstance.methods.totalSupply().call());
+      setPeriodFinish(await PoolInstance.methods.getPeriodFinish().call());
     }, 1000);
     return () => {
       clearInterval(Interval);
@@ -197,8 +206,8 @@ function Pools({ name, web3, account, connectWallet, pool }) {
             <span className="value">
               <CountUp
                 preserveValue={true}
-                end={n(plMined)}
-                decimals={2}
+                end={n(plMined, 4)}
+                decimals={4}
                 duration={1}
               ></CountUp>
             </span>
@@ -258,12 +267,19 @@ function Pools({ name, web3, account, connectWallet, pool }) {
                 plIsApproved ? GetReward() : Approve();
               }}
             >
-              <span className={account ? "" : "disable"}>
+              <span
+                className={account && !isOver(periodFinish) ? "" : "disable"}
+              >
                 {plIsApproved ? "Mine" : "Approve"}
               </span>
             </div>
             <div>
-              <span className={account ? "disable" : "disable"}>Unstake</span>
+              <span
+                onClick={UnStake}
+                className={account && isOver(periodFinish) ? "" : "disable"}
+              >
+                Unstake
+              </span>
             </div>
           </TwoBtns>
           <StakeBtn
@@ -271,7 +287,13 @@ function Pools({ name, web3, account, connectWallet, pool }) {
               account ? Stake() : connectWallet();
             }}
           >
-            <span className={!account || plIsApproved ? "" : "disable"}>
+            <span
+              className={
+                (!account && plIsApproved) || (account && isOver(periodFinish))
+                  ? "disable"
+                  : ""
+              }
+            >
               {account ? "Stake" : "Connect Wallet"}
             </span>
           </StakeBtn>
