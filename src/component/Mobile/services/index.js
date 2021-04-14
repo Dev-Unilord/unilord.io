@@ -101,7 +101,9 @@ function Services({ setType, display, setDisplay }) {
           P(time.m)
         )} : ${P(time.s)}`}</span>
         <Line />
-        <ButtonFinance>
+        <ButtonFinance
+          onClick={() => (window.location = "https://finance.unilord.io")}
+        >
           <span>LORD FINANCE</span>
         </ButtonFinance>
       </Content>
