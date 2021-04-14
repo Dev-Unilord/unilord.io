@@ -22,8 +22,8 @@ const P = number => {
 };
 function getTVL(TL, price) {
   let TVL = toBN(TL)
-    .mul(toBN(price * 10 ** 7))
-    .div(toBN(10 ** 7));
+    .mul(toBN(price * 10 ** 10))
+    .div(toBN(10 ** 10));
   return TVL;
 }
 function n(x, pad = 2) {

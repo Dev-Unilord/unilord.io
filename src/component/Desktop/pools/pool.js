@@ -10,6 +10,11 @@ import { isS } from "xmlchars/xml/1.0/ed5";
 export const ERC20_ABI = require("./../../../lib/abis/ERC20ABI.json");
 export const POOL_ABI = require("./../../../lib/abis/poolABI.json");
 
+function getAPY(TotalReward, TotalLocked, MyLocked, RewardPrice, StakePrice) {
+  //총 보상량(usd)*내 비율(%) == 보상(usd)
+  //보상(usd)/스테이킹량(usd)*365/14 == APY
+  //총 보상량(usd)*내 비율(%)/스테이킹량(usd)*365/14
+}
 const timeState = atom({
   key: "timeState",
   default: {
@@ -33,8 +38,8 @@ function n(x, pad = 2) {
 }
 function getTVL(TL, price) {
   let TVL = toBN(TL)
-    .mul(toBN(price * 10 ** 7))
-    .div(toBN(10 ** 7));
+    .mul(toBN(price * 10 ** 10))
+    .div(toBN(10 ** 10));
   return TVL;
 }
 function StartInterval(callback, t) {
