@@ -8,19 +8,10 @@ export const ERC20_ABI = require("./../../../lib/abis/ERC20ABI.json");
 export const POOL_ABI = require("./../../../lib/abis/poolABI.json");
 
 function getAPY(TotalReward, TotalLocked, MyLocked, RewardPrice, StakePrice) {
-  // TotalReward - RewardIns.balanceof
-  // TotalLocked - PoolIns.totalSupply
-  // MyLocked - PoolIns.balanceof
-  // RewardPrice - coinGecko
-  // StakePrice - coinGecko
-  //총 보상량(usd)*내 비율(%) == 보상(usd)
-  //보상(usd)/스테이킹량(usd)*365/14 == APY
-  //총 보상량(usd)*내 비율(%)/스테이킹량(usd)*365/14
   let APY = 0;
   let reward = TotalReward * RewardPrice + 1;
-  let myReward = (reward / (TotalLocked + 1)) * (MyLocked + 1);
-  let myStake = MyLocked * StakePrice + 1;
-  APY = ((myReward / myStake) * 100 * 365) / 14;
+  let staked = TotalLocked * StakePrice;
+  APY = ((reward / staked) * 100 * 365) / 14;
   if (APY > 100000000) APY = 99999999.99;
   if (isNaN(APY)) return 0;
   return APY;
