@@ -48,8 +48,8 @@ function n(x, pad = 2) {
   return x;
 }
 function getTVL(TL, price) {
-  let TVL = toBN(TL)
-    .mul(toBN(price * 10 ** 10))
+  let TVL = toBN(TL.toString())
+    .mul(toBN((price * 10 ** 10).toString().split(".")[0]))
     .div(toBN(10 ** 10));
   return TVL;
 }
@@ -130,9 +130,9 @@ function Pool({
   const [stakeToken, setStakeToken] = useState(undefined);
   const [rewardToken, setRewardToken] = useState(undefined);
   const [rewardTotal, setRewardTotal] = useState(0);
+  const [RewardTokenInstance, setRewardTokenInstance] = useState(undefined);
   const [PoolInstance, setPoolInstance] = useState(undefined);
   const [StakeTokenInstance, setStakeTokenInstance] = useState(undefined);
-  const [RewardTokenInstance, setRewardTokenInstance] = useState(undefined);
   const [duration, setDuration] = useState(0);
   const [startTime, setStartTime] = useState(0);
 

@@ -39,8 +39,8 @@ const P = number => {
   return number.toString().padStart(2, "0");
 };
 function getTVL(TL, price) {
-  let TVL = toBN(TL)
-    .mul(toBN(price * 10 ** 10))
+  let TVL = toBN(TL.toString())
+    .mul(toBN((price * 10 ** 10).toString().split(".")[0]))
     .div(toBN(10 ** 10));
   return TVL;
 }
