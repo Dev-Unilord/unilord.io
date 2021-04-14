@@ -12,7 +12,7 @@ function getAPY(TotalReward, TotalLocked, MyLocked, RewardPrice, StakePrice) {
   let reward = TotalReward * RewardPrice + 1;
   let staked = TotalLocked * StakePrice;
   APY = ((reward / staked) * 100 * 365) / 14;
-  if (APY > 100000000) APY = 99999999.99;
+  if (APY > 100000000) APY = 0;
   if (isNaN(APY)) return 0;
   return APY;
 }
