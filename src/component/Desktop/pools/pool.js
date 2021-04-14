@@ -107,7 +107,7 @@ function Pool({
   };
 
   useEffect(() => {
-    const timerInstance = setInterval(DdayTimer, 3000);
+    const timerInstance = setInterval(DdayTimer, 1000);
     return () => {
       clearInterval(timerInstance);
     };
