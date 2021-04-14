@@ -50,7 +50,7 @@ function n(x, pad = 2) {
 
   x =
     n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
-    (n.length == 2 ? "." + n[1].substr(0, pad) : ".00");
+    (n.length == 18 ? "." + n[1].substr(0, pad) : ".00");
   return x;
 }
 function StartInterval(callback, t) {
@@ -260,8 +260,8 @@ function Pools({
             <span className="value">
               <CountUp
                 preserveValue={true}
-                end={n(plMined, 4)}
-                decimals={4}
+                end={n(plMined, 18)}
+                decimals={18}
                 duration={1}
               ></CountUp>
             </span>

@@ -44,7 +44,7 @@ function n(x, pad = 2) {
   x =
     n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
     (n.length == 2 ? "." + n[1].substr(0, pad) : ".00");
-  if (pad == 4) x = n[0] + (n.length == 2 ? "." + n[1].substr(0, pad) : ".00");
+  if (pad == 18) x = n[0] + (n.length == 2 ? "." + n[1].substr(0, pad) : ".00");
   return x;
 }
 function getTVL(TL, price) {
@@ -256,8 +256,8 @@ function Pool({
           <span className="value">
             <CountUp
               preserveValue={true}
-              end={Number(n(plMined, 4))}
-              decimals={4}
+              end={Number(n(plMined, 18))}
+              decimals={18}
               duration={1}
             ></CountUp>
           </span>
