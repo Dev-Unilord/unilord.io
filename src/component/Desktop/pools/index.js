@@ -12,7 +12,7 @@ function Pools({ name, web3, account, connectWallet, pools }) {
   useEffect(() => {
     let Interval = StartInterval(async () => {
       let res = await axios.get(
-        "https://api.coingecko.com/api/v3/simple/price?ids=unilord&vs_currencies=usd"
+        "https://api.coingecko.com/api/v3/simple/price?ids=unilord,weth&vs_currencies=usd"
       );
       setPrices(res.data);
       console.log(res.data);
@@ -26,7 +26,8 @@ function Pools({ name, web3, account, connectWallet, pools }) {
       </Title>
       <Pool
         name="PEER"
-        price={prices.unilord ? prices.unilord.usd : 0}
+        stakePrice={prices.unilord ? prices.unilord.usd : 0}
+        rewardPrice={prices.weth ? prices.weth.usd : 0}
         web3={web3}
         account={account}
         connectWallet={connectWallet}
@@ -34,7 +35,8 @@ function Pools({ name, web3, account, connectWallet, pools }) {
       />
       <Pool
         name="PEER-LP"
-        price={prices.unilord ? prices.unilord.usd : 0}
+        stakePrice={prices.unilord ? prices.unilord.usd * 614 : 0}
+        rewardPrice={prices.weth ? prices.weth.usd : 0}
         web3={web3}
         account={account}
         connectWallet={connectWallet}

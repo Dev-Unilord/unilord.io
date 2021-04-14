@@ -4,16 +4,26 @@ import { atom, useRecoilState } from "recoil";
 import { fromWei, toWei, toBN } from "web3-utils";
 import { resultingClientExists } from "workbox-core/_private";
 import CountUp from "react-countup";
-import axios from "axios";
-import { isS } from "xmlchars/xml/1.0/ed5";
-
 export const ERC20_ABI = require("./../../../lib/abis/ERC20ABI.json");
 export const POOL_ABI = require("./../../../lib/abis/poolABI.json");
 
 function getAPY(TotalReward, TotalLocked, MyLocked, RewardPrice, StakePrice) {
+  // TotalReward - RewardIns.balanceof
+  // TotalLocked - PoolIns.totalSupply
+  // MyLocked - PoolIns.balanceof
+  // RewardPrice - coinGecko
+  // StakePrice - coinGecko
   //총 보상량(usd)*내 비율(%) == 보상(usd)
   //보상(usd)/스테이킹량(usd)*365/14 == APY
   //총 보상량(usd)*내 비율(%)/스테이킹량(usd)*365/14
+  let APY = 0;
+  let reward = TotalReward * RewardPrice;
+  let myReward = (reward / TotalLocked) * MyLocked;
+  let myStake = MyLocked * StakePrice;
+  APY = ((myReward / myStake) * 100 * 365) / 14;
+  if (APY > 100000000) APY = 99999999.99;
+  if (isNaN(APY)) return 0;
+  return APY;
 }
 const timeState = atom({
   key: "timeState",
@@ -34,6 +44,7 @@ function n(x, pad = 2) {
   x =
     n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
     (n.length == 2 ? "." + n[1].substr(0, pad) : ".00");
+  if (pad == 4) x = n[0] + (n.length == 2 ? "." + n[1].substr(0, pad) : ".00");
   return x;
 }
 function getTVL(TL, price) {
@@ -56,7 +67,15 @@ function isStart(startTime) {
   return timestampSecond > startTime;
 }
 
-function Pool({ name, price, web3, account, connectWallet, pool }) {
+function Pool({
+  name,
+  stakePrice,
+  rewardPrice,
+  web3,
+  account,
+  connectWallet,
+  pool
+}) {
   const [time, setTime] = useRecoilState(timeState);
 
   const DdayTimer = () => {
@@ -88,7 +107,7 @@ function Pool({ name, price, web3, account, connectWallet, pool }) {
   };
 
   useEffect(() => {
-    const timerInstance = setInterval(DdayTimer, 1000);
+    const timerInstance = setInterval(DdayTimer, 3000);
     return () => {
       clearInterval(timerInstance);
     };
@@ -110,8 +129,10 @@ function Pool({ name, price, web3, account, connectWallet, pool }) {
   const [plIsApproved, setPlIsApproved] = useState(false);
   const [stakeToken, setStakeToken] = useState(undefined);
   const [rewardToken, setRewardToken] = useState(undefined);
+  const [rewardTotal, setRewardTotal] = useState(0);
   const [PoolInstance, setPoolInstance] = useState(undefined);
   const [StakeTokenInstance, setStakeTokenInstance] = useState(undefined);
+  const [RewardTokenInstance, setRewardTokenInstance] = useState(undefined);
   const [duration, setDuration] = useState(0);
   const [startTime, setStartTime] = useState(0);
 
@@ -144,6 +165,7 @@ function Pool({ name, price, web3, account, connectWallet, pool }) {
   };
   const createTokenInstance = () => {
     setStakeTokenInstance(new web3.eth.Contract(ERC20_ABI, stakeToken));
+    setRewardTokenInstance(new web3.eth.Contract(ERC20_ABI, rewardToken));
   };
 
   useEffect(() => {
@@ -157,21 +179,23 @@ function Pool({ name, price, web3, account, connectWallet, pool }) {
   }, [rewardToken]);
 
   useEffect(async () => {
+    console.log(RewardTokenInstance);
     if (!PoolInstance) return;
     setStakeToken(await PoolInstance.methods.stakeToken.call().call());
     setRewardToken(await PoolInstance.methods.rewardToken.call().call());
+    if (!RewardTokenInstance) return;
     const Interval = StartInterval(async () => {
       setPlLocked(await PoolInstance.methods.balanceOf(account).call());
       setPlMined(await PoolInstance.methods.earned(account).call());
       setPlTL(await PoolInstance.methods.totalSupply().call());
       setDuration(await PoolInstance.methods.DURATION().call());
       setStartTime(await PoolInstance.methods.startTime().call());
-      setPlAPY();
+      setRewardTotal(await RewardTokenInstance.methods.balanceOf(pool).call());
     }, 3000);
     return () => {
       clearInterval(Interval);
     };
-  }, [PoolInstance]);
+  }, [PoolInstance, RewardTokenInstance]);
 
   useEffect(async () => {
     if (!StakeTokenInstance || !account) return;
@@ -194,7 +218,13 @@ function Pool({ name, price, web3, account, connectWallet, pool }) {
       <Content className="column">
         <img src="./images/logo-peer.svg" />
         <span className="name">{name}</span>
-        <span className="APY">APY: {plAPY}%</span>
+        <span className="APY">
+          APY:{" "}
+          {getAPY(rewardTotal, plTL, plLocked, rewardPrice, stakePrice).toFixed(
+            2
+          )}
+          %
+        </span>
         <Line />
         <span className="countdown">{`${P(time.d)}.${P(time.h)}.${P(
           time.m
@@ -203,7 +233,7 @@ function Pool({ name, price, web3, account, connectWallet, pool }) {
           Total {n(plTL)} {name}
         </span>
         <span className="lockedValue">
-          TVL {n(getTVL(plTL, price))} USD Locked
+          TVL {n(getTVL(plTL, stakePrice))} USD Locked
         </span>
         <BtnStake
           onClick={() => {
