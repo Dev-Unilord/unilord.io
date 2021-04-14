@@ -347,7 +347,7 @@ function Pools({
           >
             <span
               className={
-                (!account && plIsApproved) ||
+                (account && !plIsApproved) ||
                 (account && isOver(startTime + duration)) ||
                 (account && !isStart(startTime))
                   ? "disable"
