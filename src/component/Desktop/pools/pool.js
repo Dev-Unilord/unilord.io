@@ -310,7 +310,7 @@ function Pool({
           >
             <span
               className={
-                account && !isOver(startTime + duration) ? "" : "disable"
+                account && !isOver(startTime + duration) ? "disable" : "disable"
               }
             >
               {plIsApproved ? "Mine" : "Approve"}
@@ -319,9 +319,7 @@ function Pool({
           <div>
             <span
               onClick={UnStake}
-              className={
-                account && isOver(startTime + duration) ? "" : "disable"
-              }
+              className={account && isOver(startTime + duration) ? "" : ""}
             >
               Unstake
             </span>
@@ -338,7 +336,7 @@ function Pool({
               (account && isOver(startTime + duration)) ||
               (account && !isStart(startTime))
                 ? "disable"
-                : ""
+                : "disable"
             }
           >
             {account ? "Stake" : "Connect Wallet"}

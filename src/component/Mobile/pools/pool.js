@@ -17,6 +17,7 @@ function getAPY(TotalReward, TotalLocked, MyLocked, RewardPrice, StakePrice) {
   if (isNaN(APY)) return 0;
   return APY;
 }
+
 const timeState = atom({
   key: "timeState",
   default: {
@@ -26,15 +27,18 @@ const timeState = atom({
     s: 0
   }
 });
+
 const P = number => {
   return number.toString().padStart(2, "0");
 };
+
 function getTVL(TL, price) {
   let TVL = toBN(TL.toString())
     .mul(toBN((price * 10 ** 10).toString().split(".")[0]))
     .div(toBN(10 ** 10));
   return TVL;
 }
+
 function n(x, pad = 2) {
   x = fromWei(String(x), "ether").toString();
   let n = x.split(".");
@@ -44,10 +48,12 @@ function n(x, pad = 2) {
     (n.length == 18 ? "." + n[1].substr(0, pad) : ".00");
   return x;
 }
+
 function StartInterval(callback, t) {
   callback();
   return setInterval(callback, t);
 }
+
 function isOver(periodFinish) {
   let timestampSecond = Math.floor(+new Date() / 1000);
   return timestampSecond > periodFinish;
@@ -314,7 +320,9 @@ function Pools({
             >
               <span
                 className={
-                  account && !isOver(startTime + duration) ? "" : "disable"
+                  account && !isOver(startTime + duration)
+                    ? "disable"
+                    : "disable"
                 }
               >
                 {plIsApproved ? "Mine" : "Approve"}
@@ -323,9 +331,7 @@ function Pools({
             <div>
               <span
                 onClick={UnStake}
-                className={
-                  account && isOver(startTime + duration) ? "" : "disable"
-                }
+                className={account && isOver(startTime + duration) ? "" : ""}
               >
                 Unstake
               </span>
@@ -342,7 +348,7 @@ function Pools({
                 (account && isOver(startTime + duration)) ||
                 (account && !isStart(startTime))
                   ? "disable"
-                  : ""
+                  : "disable"
               }
             >
               {account ? "Stake" : "Connect Wallet"}
