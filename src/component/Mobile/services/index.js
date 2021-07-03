@@ -8,10 +8,10 @@ const timeState = atom({
     d: 0,
     h: 0,
     m: 0,
-    s: 0
-  }
+    s: 0,
+  },
 });
-const P = number => {
+const P = (number) => {
   return number.toString().padStart(2, "0");
 };
 function Services({ setType, display, setDisplay }) {
@@ -33,14 +33,14 @@ function Services({ setType, display, setDisplay }) {
         d: 0,
         h: 0,
         m: 0,
-        s: 0
+        s: 0,
       });
     } else {
       setTime({
         d,
         h,
         m,
-        s
+        s,
       });
     }
   };
@@ -61,8 +61,7 @@ function Services({ setType, display, setDisplay }) {
           <img className="pool" src="./images/LORD-POOL.png" />
           <Button
             onClick={() => {
-              setType("pool");
-              setDisplay(!display);
+              document.location.href = "https://finance.unilord.io";
             }}
           >
             <span>More</span>
@@ -73,8 +72,7 @@ function Services({ setType, display, setDisplay }) {
           <img className="swap" src="./images/LORD-SWAP.png" />
           <Button
             onClick={() => {
-              setType("swap");
-              setDisplay(!display);
+              document.location.href = "https://finance.unilord.io/#Swap";
             }}
           >
             <span>More</span>

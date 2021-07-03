@@ -60,6 +60,7 @@ const Content = styled.div`
   }
 `;
 const Btn = styled.div`
+  cursor: pointer;
   display: flex;
   margin: auto auto;
   width: 410px;

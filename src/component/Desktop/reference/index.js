@@ -60,7 +60,11 @@ function Reference() {
             <img src="./images/logo-uniswap.png" className="uniswap" />
             <span>Listed on Uniswap</span>
           </Logo>
-          <Logo onClick={() => window.open("./")}>
+          <Logo
+            onClick={() =>
+              window.open("https://www.certik.org/projects/unilord")
+            }
+          >
             <img src="./images/logo-certik.png" className="certik" />
             <span>Audited by Certik</span>
           </Logo>
